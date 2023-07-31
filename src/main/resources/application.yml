@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://52.79.110.78:5432/demodb
+    username: demo
+    password: '@crom0805'
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
+
+jwt:
+  secret: ZGVtb3Byb2plY3RieWRldmNyb218ZGVtb3Byb2plY3RieWRldmNyb20=
