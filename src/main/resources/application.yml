@@ -13,9 +13,11 @@ spring:
 #        show_sql: true
         format_sql: true
 
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
-
 jwt:
   secret: ZGVtb3Byb2plY3RieWRldmNyb218ZGVtb3Byb2plY3RieWRldmNyb20=
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
+  config: classpath:log4j2.yml

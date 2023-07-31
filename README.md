@@ -12,3 +12,6 @@
 - Gradle
 - Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
 - PostgreSQL
+- Server : Aws EC2 Free Tier
+- OS : Ubuntu 20.04
+- CI/CD : Jenkins
