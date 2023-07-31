@@ -20,4 +20,6 @@ logging:
   level:
     org.hibernate.SQL: debug
 #    org.hibernate.type: trace
-  config: classpath:log4j2.yml
+    com.example.demo: debug
+    root: info
+#  config: classpath:log4j2.yml
