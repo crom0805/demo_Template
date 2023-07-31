@@ -2,9 +2,7 @@ package com.example.demo.member.service;
 
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

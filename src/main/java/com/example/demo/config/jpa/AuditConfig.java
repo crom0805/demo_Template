@@ -1,6 +1,5 @@
 package com.example.demo.config.jpa;
 
-import com.example.demo.member.entity.Member;
 import java.util.Optional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
