@@ -10,5 +10,5 @@
 - Spring Data JPA
 - Spring Security & JWT
 - Gradle
-- Swagger(springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
+- Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
 - PostgreSQL

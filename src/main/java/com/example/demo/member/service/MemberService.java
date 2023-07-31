@@ -31,6 +31,9 @@ public class MemberService {
 	 */
 	@Transactional
 	public MemberResponseDto save(MemberAddRequestDto requestDto) {
+		// member id validation check
+		validateDuplicateMember(requestDto);
+
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		Member savedMember = memberRepository.save(Member.builder()
                 .memberId(requestDto.getMemberId())
@@ -43,9 +46,15 @@ public class MemberService {
 			.memberId(savedMember.getMemberId())
 			.memberName(savedMember.getMemberName())
 			.memberTel(savedMember.getMemberTel())
-			.memberState(savedMember.getMemberState())
+			//.memberState(savedMember.getMemberState())
 			.refreshToken(savedMember.getRefreshToken())
 			.build();
+	}
+
+	private void validateDuplicateMember(MemberAddRequestDto requestDto) {
+		if (memberRepository.existsByMemberId(requestDto.getMemberId())) {
+			throw new IllegalStateException("이미 존재하는 회원ID입니다.");
+		}
 	}
 
 	/**
@@ -73,6 +82,7 @@ public class MemberService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw e;
 		}
 
         return tokenInfo;
@@ -86,7 +96,7 @@ public class MemberService {
 			.memberId(findMember.getMemberId())
 			.memberName(findMember.getMemberName())
 			.memberTel(findMember.getMemberTel())
-			.memberState(findMember.getMemberState())
+			//.memberState(findMember.getMemberState())
 			.refreshToken(findMember.getRefreshToken())
 			.build();
 	}
