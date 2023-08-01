@@ -30,31 +30,27 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "member", description = "회원관련 API")
 public class MemberController {
 
 	private final MemberService memberService;
 
-
-	@Operation(summary = "회원가입", description = "회원가입을 위한 API", tags = { "member"} )
+	@Tag(name = "1-회원가입")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "회원가입 성공"),
-		@ApiResponse(responseCode = "409", description = "회원ID 중복")
+		@ApiResponse(responseCode = "201", description = "회원가입 성공")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	@PostMapping(value = "/members/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping("/members/signup")
 	public ApiResult<MemberResponseDto> signup(@Parameter(description = "가입하려는 회원정보", required = true)
 			@Validated(ValidationSequence.class) @RequestBody MemberAddRequestDto requestDto) {
 		MemberResponseDto saved = memberService.save(requestDto);
 		return ApiResult.createSuccess(saved);
 	}
 
-	@Operation(summary = "로그인", description = "로그인을 위한 API", tags = { "member"} )
+	@Tag(name = "2-로그인")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "로그인 성공"),
-		@ApiResponse(responseCode = "404", description = "로그인실패")
+		@ApiResponse(responseCode = "200", description = "로그인 성공")
 	})
-	@PostMapping(value = "/members/login", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping("/members/login")
     public ApiResult<TokenInfo> login(@Parameter(description = "로그인하려는 ID/비밀번호", required = true)
 			@Validated(ValidationSequence.class) @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         String memberId = memberLoginRequestDto.getMemberId();
@@ -63,25 +59,25 @@ public class MemberController {
 		return ApiResult.createSuccess(tokenInfo);
 	}
 
-	@Operation(summary = "회원조회", description = "회원정보를 조회하기위한 API", tags = { "member"} )
+	@Tag(name = "3-회원조회")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "회원상세정보") })
-	@GetMapping(value = "/members/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/members/{id}")
 	public ApiResult<MemberResponseDto> findMemeber(@Parameter(description = "조회하려는 회원ID", required = true) @PathVariable("id") String memberId) {
 		MemberResponseDto member = memberService.findByMemberId(memberId);
 		return ApiResult.createSuccess(member);
 	}
 
-	@Operation(summary = "회원전체 목록조회", description = "회원전체 목록을 조회하기위한 API", tags = { "member"} )
+	@Tag(name = "4-회원전체조회")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "회원목록") })
-	@GetMapping(value = "/members", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/members")
 	public ApiResult<List<MemberResponseDto>> findAll() {
 		List<MemberResponseDto> members = memberService.findAll();
 		return ApiResult.createSuccess(members);
 	}
 
-	@Operation(summary = "회원정보 수정", description = "회원정보를 수정하기위한 API", tags = { "member"} )
+	@Tag(name = "5-회원수정")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "수정성공") })
-	@PutMapping(value = "/members/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping("/members/{id}")
 	public ApiResult<?> update(@Parameter(description = "수정하려는 회원정보", required = true) @RequestBody MemberUpdateDto memberUpdateDto
 		, @Parameter(description = "수정하려는 회원 ID", required = true) @PathVariable("id") String memberId) {
 		memberService.update(memberUpdateDto, memberId);

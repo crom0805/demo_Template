@@ -23,3 +23,8 @@ logging:
     com.example.demo: debug
     root: info
 #  config: classpath:log4j2.yml
+
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui:
+    tags-sorter: alpha

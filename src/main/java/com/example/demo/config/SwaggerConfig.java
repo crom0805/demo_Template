@@ -34,7 +34,7 @@ public class SwaggerConfig {
         Info info = new Info()
                 .version("v1.0.0")
                 .title("Demo API")
-                .description("Demo API Description");
+                .description("Spring Boot를 이용한 Demo 웹 애플리케이션 API입니다.");
 
         // SecuritySecheme명
         String jwtSchemeName = "jwtAuth";
