@@ -5,11 +5,14 @@
 > 스프링부트를 기반으로한 Backend API Demo
 
 ## 개발환경
-- Java 17
-- SpringBoot 3.1.2
-- Spring Data JPA
-- Spring Security & JWT
-- Gradle
-- Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
-- PostgreSQL
-- Aws EC2 Free Tier, Ubuntu, Jenkins
+- Java Version : Java 17
+- Framework : Spring Boot 3.1.2
+- ORM : Spring Data JPA
+- Auth : Spring Security & JWT
+- Build : Gradle
+- Test : JUnit 5
+- Api Document : Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
+- Server : Aws EC2 Free Tier
+- OS : Ubuntu
+- CI/CD : Jenkins
+- DB : PostgreSQL
