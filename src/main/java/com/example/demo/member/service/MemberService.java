@@ -1,5 +1,7 @@
 package com.example.demo.member.service;
 
+import com.example.demo.common.exception.DuplicatedUserException;
+import com.example.demo.common.exception.UserNotFoundException;
 import com.example.demo.config.jwt.JwtTokenProvider;
 import com.example.demo.config.jwt.dto.TokenInfo;
 import com.example.demo.member.dto.MemberAddRequestDto;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -55,7 +58,7 @@ public class MemberService {
 
 	private void validateDuplicateMember(MemberAddRequestDto requestDto) {
 		if (memberRepository.existsByMemberId(requestDto.getMemberId())) {
-			throw new IllegalStateException("이미 존재하는 회원ID입니다.");
+			throw new DuplicatedUserException();
 		}
 	}
 
@@ -64,6 +67,7 @@ public class MemberService {
 	 */
 	@Transactional
     public TokenInfo login(String memberId, String password) {
+
 		TokenInfo tokenInfo = null;
 		try {
 			log.debug("Authentication 객체 생성");
@@ -71,28 +75,28 @@ public class MemberService {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
 
 			log.debug("CustomUserDetailsService.loadUserByUsername 실행");
+
 			// 2. 실제 검증. CustomUserDetailsService.loadUserByUsername 실행
 			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        	// 3. 인증 정보를 기반으로 JWT 토큰 생성
-        	tokenInfo = jwtTokenProvider.generateToken(authentication);
+			// 3. 인증 정보를 기반으로 JWT 토큰 생성
+			tokenInfo = jwtTokenProvider.generateToken(authentication);
 
 			// 4. refreshToken 저장
 			Member member = memberRepository.findByMemberId(memberId)
 				.orElseThrow();
 			member.updateRefreshToken(tokenInfo.getRefreshToken());
-
+		} catch (InternalAuthenticationServiceException authenticationServiceException) {
+			throw new UserNotFoundException();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw e;
 		}
-
         return tokenInfo;
     }
 
 	public MemberResponseDto findByMemberId(String memberId) {
 		Member findMember = memberRepository.findByMemberId(memberId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을수 없습니다."));
+			.orElseThrow(UserNotFoundException::new);
 
 		return MemberResponseDto.builder()
 			.memberId(findMember.getMemberId())
@@ -113,7 +117,7 @@ public class MemberService {
 	@Transactional
 	public void update(MemberUpdateDto memberUpdateDto, String memberId) {
 		Member member = memberRepository.findByMemberId(memberId)
-			.orElseThrow();
+			.orElseThrow(UserNotFoundException::new);
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		memberUpdateDto.setMemberPwd(bCryptPasswordEncoder.encode(memberUpdateDto.getMemberPwd()));
 		member.updateMember(memberUpdateDto);

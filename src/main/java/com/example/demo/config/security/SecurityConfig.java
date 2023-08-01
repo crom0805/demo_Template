@@ -24,9 +24,11 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
-                .requestMatchers("/swagger-ui/**");
+                .requestMatchers("/swagger-ui/**")
+                .requestMatchers("/members/signup")
+                .requestMatchers("/members/login")
+                .requestMatchers("/v3/api-docs/**");
     }
-
 
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,6 +47,12 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
 
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
+
+
+//        http.exceptionHandling(exceptionHandling ->
+//                exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
+
         return http.build();
     }
 
