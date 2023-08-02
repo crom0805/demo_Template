@@ -19,16 +19,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
 	@Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        try {
-            filterChain.doFilter(request, response);
-        } catch (Exception e) {
-        	if (e instanceof BadCredentialsException) {
+		try {
+			filterChain.doFilter(request, response);
+		} catch (Exception e) {
+			if (e instanceof BadCredentialsException) {
 				setErrorResponse(response, ExceptionEnum.FORBIDDEN);
 			} else if (e instanceof io.jsonwebtoken.security.SecurityException) {
 				setErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN);
-			} else if (e instanceof  MalformedJwtException) {
+			} else if (e instanceof MalformedJwtException) {
 				setErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN);
 			} else if (e instanceof ExpiredJwtException) {
 				setErrorResponse(response, ExceptionEnum.EXPIRED_JWT_EXCEPTION);
@@ -37,19 +37,19 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 			} else if (e instanceof EmptyTokenException) {
 				setErrorResponse(response, ExceptionEnum.EMPTY_JWT_EXCEPTION);
 			}
-        }
-    }
+		}
+	}
 
 	private void setErrorResponse(HttpServletResponse response, ExceptionEnum exceptionEnum) {
-        ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper();
 		response.setCharacterEncoding("UTF-8");
-        response.setStatus(exceptionEnum.getStatus().value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		response.setStatus(exceptionEnum.getStatus().value());
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		ApiResult<?> error = ApiResult.createError(exceptionEnum.getMessage());
-		try{
-            response.getWriter().write(objectMapper.writeValueAsString(error));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+		try {
+			response.getWriter().write(objectMapper.writeValueAsString(error));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

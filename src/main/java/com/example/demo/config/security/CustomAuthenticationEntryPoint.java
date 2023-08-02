@@ -17,23 +17,23 @@ import org.springframework.stereotype.Component;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
 		if (authException instanceof BadCredentialsException) {
 			setErrorResponse(response, ExceptionEnum.FORBIDDEN);
 		}
-    }
+	}
 
 	private void setErrorResponse(HttpServletResponse response, ExceptionEnum exceptionEnum) {
-        ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper();
 		response.setCharacterEncoding("UTF-8");
-        response.setStatus(exceptionEnum.getStatus().value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		response.setStatus(exceptionEnum.getStatus().value());
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		ApiResult<?> error = ApiResult.createError(exceptionEnum.getMessage());
-		try{
-            response.getWriter().write(objectMapper.writeValueAsString(error));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+		try {
+			response.getWriter().write(objectMapper.writeValueAsString(error));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

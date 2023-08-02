@@ -28,8 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final JwtTokenProvider jwtTokenProvider;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final JwtTokenProvider jwtTokenProvider;
 
 	/**
 	 * 저장(회원가입)
@@ -41,11 +41,11 @@ public class MemberService {
 
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		Member savedMember = memberRepository.save(Member.builder()
-                .memberId(requestDto.getMemberId())
-                .memberPwd(bCryptPasswordEncoder.encode(requestDto.getMemberPwd()))
-				.memberName(requestDto.getMemberName())
-				.memberTel(requestDto.getMemberTel())
-                .build());
+			.memberId(requestDto.getMemberId())
+			.memberPwd(bCryptPasswordEncoder.encode(requestDto.getMemberPwd()))
+			.memberName(requestDto.getMemberName())
+			.memberTel(requestDto.getMemberTel())
+			.build());
 
 		return MemberResponseDto.builder()
 			.memberId(savedMember.getMemberId())
@@ -66,7 +66,7 @@ public class MemberService {
 	 * 로그인(=jwt 인증)
 	 */
 	@Transactional
-    public TokenInfo login(String memberId, String password) {
+	public TokenInfo login(String memberId, String password) {
 
 		TokenInfo tokenInfo = null;
 		try {
@@ -91,8 +91,8 @@ public class MemberService {
 		} catch (Exception e) {
 			throw e;
 		}
-        return tokenInfo;
-    }
+		return tokenInfo;
+	}
 
 	public MemberResponseDto findByMemberId(String memberId) {
 		Member findMember = memberRepository.findByMemberId(memberId)

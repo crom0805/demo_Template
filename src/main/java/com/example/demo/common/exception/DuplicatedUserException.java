@@ -8,7 +8,7 @@ public class DuplicatedUserException extends RuntimeException {
 	private ExceptionEnum error;
 
 	public DuplicatedUserException() {
-        super(ExceptionEnum.DUPLICATED_MEMBERID.getMessage());
-        this.error = ExceptionEnum.DUPLICATED_MEMBERID;
-    }
+		super(ExceptionEnum.DUPLICATED_MEMBERID.getMessage());
+		this.error = ExceptionEnum.DUPLICATED_MEMBERID;
+	}
 }

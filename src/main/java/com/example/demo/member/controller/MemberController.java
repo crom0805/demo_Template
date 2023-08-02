@@ -41,7 +41,7 @@ public class MemberController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping("/members/signup")
 	public ApiResult<MemberResponseDto> signup(@Parameter(description = "가입하려는 회원정보", required = true)
-			@Validated(ValidationSequence.class) @RequestBody MemberAddRequestDto requestDto) {
+	@Validated(ValidationSequence.class) @RequestBody MemberAddRequestDto requestDto) {
 		MemberResponseDto saved = memberService.save(requestDto);
 		return ApiResult.createSuccess(saved);
 	}
@@ -51,16 +51,16 @@ public class MemberController {
 		@ApiResponse(responseCode = "200", description = "로그인 성공")
 	})
 	@PostMapping("/members/login")
-    public ApiResult<TokenInfo> login(@Parameter(description = "로그인하려는 ID/비밀번호", required = true)
-			@Validated(ValidationSequence.class) @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-        String memberId = memberLoginRequestDto.getMemberId();
-        String memberPwd = memberLoginRequestDto.getMemberPwd();
+	public ApiResult<TokenInfo> login(@Parameter(description = "로그인하려는 ID/비밀번호", required = true)
+	@Validated(ValidationSequence.class) @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+		String memberId = memberLoginRequestDto.getMemberId();
+		String memberPwd = memberLoginRequestDto.getMemberPwd();
 		TokenInfo tokenInfo = memberService.login(memberId, memberPwd);
 		return ApiResult.createSuccess(tokenInfo);
 	}
 
 	@Tag(name = "3-회원조회")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "회원상세정보") })
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "회원상세정보")})
 	@GetMapping("/members/{id}")
 	public ApiResult<MemberResponseDto> findMemeber(@Parameter(description = "조회하려는 회원ID", required = true) @PathVariable("id") String memberId) {
 		MemberResponseDto member = memberService.findByMemberId(memberId);
@@ -68,7 +68,7 @@ public class MemberController {
 	}
 
 	@Tag(name = "4-회원전체조회")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "회원목록") })
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "회원목록")})
 	@GetMapping("/members")
 	public ApiResult<List<MemberResponseDto>> findAll() {
 		List<MemberResponseDto> members = memberService.findAll();
@@ -76,7 +76,7 @@ public class MemberController {
 	}
 
 	@Tag(name = "5-회원수정")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "수정성공") })
+	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "수정성공")})
 	@PutMapping("/members/{id}")
 	public ApiResult<?> update(@Parameter(description = "수정하려는 회원정보", required = true) @RequestBody MemberUpdateDto memberUpdateDto
 		, @Parameter(description = "수정하려는 회원 ID", required = true) @PathVariable("id") String memberId) {

@@ -13,32 +13,32 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(DuplicatedUserException.class)
-    public ResponseEntity<ApiResult<?>> handleDuplicatedUserException(DuplicatedUserException e) {
-        return ResponseEntity.status(e.getError().getStatus()).body(ApiResult.createError(e.getError().getMessage()));
-    }
+	public ResponseEntity<ApiResult<?>> handleDuplicatedUserException(DuplicatedUserException e) {
+		return ResponseEntity.status(e.getError().getStatus()).body(ApiResult.createError(e.getError().getMessage()));
+	}
 
 	@ExceptionHandler(EmptyTokenException.class)
-    public ResponseEntity<ApiResult<?>> emptyTokenException(EmptyTokenException e) {
-        return ResponseEntity.status(e.getError().getStatus()).body(ApiResult.createError(e.getError().getMessage()));
-    }
+	public ResponseEntity<ApiResult<?>> emptyTokenException(EmptyTokenException e) {
+		return ResponseEntity.status(e.getError().getStatus()).body(ApiResult.createError(e.getError().getMessage()));
+	}
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResult<?>> handleValidationExceptions(BindingResult bindingResult) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResult.createFail(bindingResult));
-    }
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ApiResult<?>> handleValidationExceptions(BindingResult bindingResult) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResult.createFail(bindingResult));
+	}
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiResult<?>> badCredentialsExceptions() {
-        return ResponseEntity.status(ExceptionEnum.FORBIDDEN.getStatus()).body(ApiResult.createError(ExceptionEnum.FORBIDDEN.getMessage()));
-    }
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ApiResult<?>> badCredentialsExceptions() {
+		return ResponseEntity.status(ExceptionEnum.FORBIDDEN.getStatus()).body(ApiResult.createError(ExceptionEnum.FORBIDDEN.getMessage()));
+	}
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApiResult<?>> userNotFoundException(UserNotFoundException e) {
-        return ResponseEntity.status(e.getError().getStatus()).body(ApiResult.createError(e.getError().getMessage()));
-    }
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ApiResult<?>> userNotFoundException(UserNotFoundException e) {
+		return ResponseEntity.status(e.getError().getStatus()).body(ApiResult.createError(e.getError().getMessage()));
+	}
 
 	@ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResult<?>> exception(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResult.createError(exception.getMessage()));
-    }
+	public ResponseEntity<ApiResult<?>> exception(RuntimeException exception) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResult.createError(exception.getMessage()));
+	}
 }

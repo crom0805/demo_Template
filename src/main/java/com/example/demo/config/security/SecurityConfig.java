@@ -19,45 +19,43 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
-    @Bean
-    public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring()
-                .requestMatchers("/swagger-ui/**")
-                .requestMatchers("/members/signup")
-                .requestMatchers("/members/login")
-                .requestMatchers("/v3/api-docs/**");
-    }
+	private final JwtTokenProvider jwtTokenProvider;
 
 	@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
+	public WebSecurityCustomizer configure() {
+		return (web) -> web.ignoring()
+			.requestMatchers("/swagger-ui/**")
+			.requestMatchers("/members/signup")
+			.requestMatchers("/members/login")
+			.requestMatchers("/v3/api-docs/**");
+	}
 
-        http.sessionManagement(sessionManagement -> sessionManagement
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable);
 
+		http.sessionManagement(sessionManagement -> sessionManagement
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests(request -> request
-                .requestMatchers("/members/login").permitAll()
-                .requestMatchers("/members/signup").permitAll()
-                .requestMatchers("/swagger-ui/index.html").permitAll()
-                .requestMatchers("/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated());
+		http.authorizeHttpRequests(request -> request
+			.requestMatchers("/members/login").permitAll()
+			.requestMatchers("/members/signup").permitAll()
+			.requestMatchers("/swagger-ui/index.html").permitAll()
+			.requestMatchers("/v3/api-docs/**").permitAll()
+			.anyRequest().authenticated());
 
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
-
+		http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
 
 //        http.exceptionHandling(exceptionHandling ->
 //                exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

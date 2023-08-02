@@ -39,9 +39,10 @@ public class MemberControllerTest {
 	private static String token;
 
 	@Autowired
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-	private final ObjectMapper objectMapper = new ObjectMapper();;
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	;
 
 	@BeforeEach
 	public void setUp() {
@@ -59,12 +60,12 @@ public class MemberControllerTest {
 		dto.put("memberTel", "01099994444");
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DOMAIN + "/members/signup")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(dto));
 
 		//when
-		ResultActions actions  = mockMvc.perform(requestBuilder);
+		ResultActions actions = mockMvc.perform(requestBuilder);
 
 		//then
 		actions.andExpect(status().isCreated())
@@ -84,12 +85,12 @@ public class MemberControllerTest {
 		dto.put("memberPwd", "1q2w3e4r");
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DOMAIN + "/members/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(dto));
 
 		//when
-		ResultActions actions  = mockMvc.perform(requestBuilder);
+		ResultActions actions = mockMvc.perform(requestBuilder);
 
 		//then
 		actions.andExpect(status().isOk())
@@ -97,7 +98,7 @@ public class MemberControllerTest {
 			.andExpect(jsonPath("data.grantType").value("Bearer"))
 			.andExpect(jsonPath("data.accessToken").isString())
 			.andExpect(jsonPath("data.refreshToken").isString())
-			;
+		;
 
 		String result = actions.andReturn().getResponse().getContentAsString();
 		ApiResult<?> apiResult = (objectMapper.readValue(result, ApiResult.class));
@@ -109,19 +110,18 @@ public class MemberControllerTest {
 	public void 회원목록조회() throws Exception {
 		//given
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(DOMAIN + "/members")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-			;
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
 		//when
-		ResultActions actions  = mockMvc.perform(requestBuilder);
+		ResultActions actions = mockMvc.perform(requestBuilder);
 
 		//then
 		actions.andExpect(status().isOk())
 			.andExpect(jsonPath("status").value("success"))
 			.andExpect(jsonPath("data").isArray())
-			;
+		;
 	}
 
 	@Order(4)
@@ -129,20 +129,19 @@ public class MemberControllerTest {
 	public void 회원조회() throws Exception {
 		//given
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(DOMAIN + "/members/test@test.com")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-			;
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
 		//when
-		ResultActions actions  = mockMvc.perform(requestBuilder);
+		ResultActions actions = mockMvc.perform(requestBuilder);
 
 		//then
 		actions.andExpect(status().isOk())
 			.andExpect(jsonPath("status").value("success"))
 			.andExpect(jsonPath("data.memberId").value("test@test.com"))
 			.andExpect(jsonPath("data.memberName").value("팜하니"))
-			;
+		;
 	}
 
 	@Order(5)
@@ -157,13 +156,13 @@ public class MemberControllerTest {
 		dto.put("memberTel", "01099994444");
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.put(DOMAIN + "/members/test@test.com")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
 			.content(objectMapper.writeValueAsString(dto));
 
 		//when
-		ResultActions actions  = mockMvc.perform(requestBuilder);
+		ResultActions actions = mockMvc.perform(requestBuilder);
 
 		//then
 		actions.andExpect(status().isOk())

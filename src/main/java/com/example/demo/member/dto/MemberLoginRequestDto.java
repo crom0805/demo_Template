@@ -14,5 +14,5 @@ public class MemberLoginRequestDto {
 
 	@NotEmpty(message = "비밀번호를 입력해주세요.", groups = NotEmptyGroup.class)
 	@Schema(description = "비밀번호", nullable = false, example = "1q2w3e4r")
-    private String memberPwd;
+	private String memberPwd;
 }

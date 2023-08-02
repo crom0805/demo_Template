@@ -8,7 +8,7 @@ public class UserNotFoundException extends RuntimeException {
 	private ExceptionEnum error;
 
 	public UserNotFoundException() {
-        super(ExceptionEnum.MEMBER_NOT_FOUND.getMessage());
+		super(ExceptionEnum.MEMBER_NOT_FOUND.getMessage());
 		this.error = ExceptionEnum.MEMBER_NOT_FOUND;
-    }
+	}
 }

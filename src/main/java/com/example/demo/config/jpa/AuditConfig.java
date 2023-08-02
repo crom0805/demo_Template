@@ -9,15 +9,16 @@ import org.springframework.security.core.userdetails.User;
 
 @Configuration
 public class AuditConfig implements AuditorAware<String> {
-	@Override
-    public Optional<String> getCurrentAuditor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-		if(authentication == null || !authentication.isAuthenticated()
-				|| authentication.getPrincipal().equals("anonymousUser")) {
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication == null || !authentication.isAuthenticated()
+			|| authentication.getPrincipal().equals("anonymousUser")) {
 			return Optional.empty();
 		}
 
-		return Optional.of(((User)authentication.getPrincipal()).getUsername());
-    }
+		return Optional.of(((User) authentication.getPrincipal()).getUsername());
+	}
 }

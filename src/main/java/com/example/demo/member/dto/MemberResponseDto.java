@@ -10,6 +10,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class MemberResponseDto {
+
 	@Schema(description = "로그인시에 사용할 이메일", nullable = false, example = "test@test.com")
 	private String memberId;
 
