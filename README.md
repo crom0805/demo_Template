@@ -12,6 +12,6 @@
 - Build : Gradle
 - Test : JUnit 5
 - Api Document : Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
-- Server : Aws EC2 Free Tier
+- Server : Oracle Cloud Free Tier
 - OS : Ubuntu 22.04
 - DB : PostgreSQL
