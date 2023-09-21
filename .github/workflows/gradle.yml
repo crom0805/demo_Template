@@ -49,11 +49,11 @@ jobs:
         with:
           name: demo-template
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.4
+        uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
       - name: SCP transfer
-        run: scp *.jar ubuntu@193.122.113.133:~/cicd
+        run: scp *.jar ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }}:~/cicd
       - name: Execute remote commands
         run: |
           ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo fuser -k 8080/tcp || true"
