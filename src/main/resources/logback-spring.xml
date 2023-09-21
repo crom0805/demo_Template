@@ -2,9 +2,9 @@
 <!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
 <configuration scan="true" scanPeriod="60 seconds">
     <!-- 로그 파일이 저장될 경로 -->
-    <property name="LOG_PATH" value="/home/ubuntu/logs"/>
+    <springProperty name="LOG_PATH" source="logging.path"/>
     <!-- 로그 파일 이름 -->
-    <property name="LOG_FILE_NAME" value="demo"/>
+    <springProperty name="LOG_FILE_NAME" source="logging.filename"/>
     <!-- 로그 출력 패턴 -->
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%logger{40}] - %msg%n"/>
     <!-- 로그 레벨 -->
