@@ -9,6 +9,7 @@
 - Framework : Spring Boot 3.1.2
 - ORM : Spring Data JPA
 - Auth : Spring Security & JWT
+- Env : Spring Cloud Config
 - Build : Gradle
 - Test : JUnit 5
 - Api Document : Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
