@@ -1,5 +1,31 @@
 spring:
-  application:
-    name: demo
-  config:
-    import: optional:configserver:http://193.122.113.133:8088
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://193.122.113.133:5432/devcrom
+    username: devcrom
+    password: '@qwer!1234'
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+
+jwt:
+  secret: ZGVtb3Byb2plY3RieWRldmNyb218ZGVtb3Byb2plY3RieWRldmNyb20=
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
+    com.example.demo: debug
+    root: info
+  path: ./logs
+  filename: demo
+
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui:
+    tags-sorter: alpha
