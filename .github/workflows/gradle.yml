@@ -53,7 +53,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
       - name: SCP transfer
-        run: scp *.jar ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }}:~/cicd
+        run: |
+          scp -o StrictHostKeyChecking=no *.jar ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }}:~/cicd
       - name: Execute remote commands
         run: |
           ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo fuser -k 8080/tcp || true"
