@@ -1,4 +1,4 @@
-# demo project
+# demo project [![Java CI with Gradle](https://github.com/crom0805/demo_Template/actions/workflows/gradle.yml/badge.svg)](https://github.com/crom0805/demo_Template/actions/workflows/gradle.yml)
 - Github : https://github.com/crom0805/demo_Template
 - Swagger : http://193.122.113.133:8080/swagger-ui/index.html
 
@@ -16,3 +16,4 @@
 - Server : Oracle Cloud Free Tier
 - OS : Ubuntu 22.04
 - DB : PostgreSQL
+- CI/CD : Github Action (Java CI with Gradle)
