@@ -50,8 +50,8 @@ jobs:
           name: demo-template
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.5.4
-#        with:
-#          ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+        with:
+          ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
       - name: SCP transfer
         run: scp *.jar ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }}:~/cicd
       - name: Execute remote commands
