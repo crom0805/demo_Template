@@ -34,3 +34,27 @@ jobs:
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: demo-template
+        path: build/libs/*.jar
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: demo-template
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+      - name: SCP transfer
+        run: scp *.jar ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }}:~/cicd
+      - name: Execute remote commands
+        run: |
+          ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo fuser -k 8080/tcp || true"
+          ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo nohup /usr/bin/java -jar -Dspring.profiles.active=dev ~/cicd/demo-template.jar &"
