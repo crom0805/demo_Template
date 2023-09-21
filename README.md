@@ -12,7 +12,7 @@
 - Env : Spring Cloud Config
 - Build : Gradle
 - Test : JUnit 5
-- Api Document : Swagger (springdoc 사용, SpringBoot 3버전부터는 springfox가 지원되지 않음)
+- Api Document : Swagger
 - Server : Oracle Cloud Free Tier
 - OS : Ubuntu 22.04
 - DB : PostgreSQL
