@@ -58,4 +58,4 @@ jobs:
       - name: Execute remote commands
         run: |
           ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo fuser -k 8080/tcp || true"
-          ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo nohup /usr/bin/java -jar -Dspring.profiles.active=dev ~/cicd/demo-0.0.1-SNAPSHOT.jar  > ~/cicd/nohup.log 2>&1 &"
+          ssh ${{ secrets.OCI_SSH_USER }}@${{ secrets.OCI_PUBLIC_IP }} "sudo nohup /usr/bin/java -jar -Dspring.profiles.active=dev ~/cicd/demo-0.0.1-SNAPSHOT.jar  > /dev/null 2>&1 &"
