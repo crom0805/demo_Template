@@ -1,0 +1,14 @@
+POST http://localhost:8080/members/login
+Content-Type: application/json
+
+{
+  "memberId": "test@test.com",
+  "memberPwd": "1q2w3e4r"
+}
+
+> {% client.global.set("accessToken", response.body.data.accessToken); %}
+
+
+###
+GET http://localhost:8080/members?memberName=하
+Authorization: Bearer {{accessToken}}
