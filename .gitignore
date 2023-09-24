@@ -36,3 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 /logs/
+/src/main/generated/com/example/demo/common/entity/QBaseEntity.java
+/src/main/generated/com/example/demo/common/entity/QBaseTimeEntity.java
+/src/main/generated/com/example/demo/member/dto/QMemberResponseDto.java
+/src/main/generated/com/example/demo/member/entity/QMember.java
+/src/main/generated/

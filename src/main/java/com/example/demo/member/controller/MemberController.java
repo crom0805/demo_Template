@@ -6,9 +6,9 @@ import com.example.demo.config.jwt.dto.TokenInfo;
 import com.example.demo.member.dto.MemberAddRequestDto;
 import com.example.demo.member.dto.MemberLoginRequestDto;
 import com.example.demo.member.dto.MemberResponseDto;
+import com.example.demo.member.dto.MemberSearchDto;
 import com.example.demo.member.dto.MemberUpdateDto;
 import com.example.demo.member.service.MemberService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,8 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,23 +59,31 @@ public class MemberController {
 		return ApiResult.createSuccess(tokenInfo);
 	}
 
-	@Tag(name = "3-회원조회")
+	@Tag(name = "3-회원상세조회")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "회원상세정보")})
-	@GetMapping("/members/{id}")
+	@GetMapping("/member/{id}")
 	public ApiResult<MemberResponseDto> findMemeber(@Parameter(description = "조회하려는 회원ID", required = true) @PathVariable("id") String memberId) {
 		MemberResponseDto member = memberService.findByMemberId(memberId);
 		return ApiResult.createSuccess(member);
 	}
 
-	@Tag(name = "4-회원전체조회")
+//	@Tag(name = "4-회원전체조회")
+//	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "회원목록")})
+//	@GetMapping("/members")
+//	public ApiResult<List<MemberResponseDto>> findAll() {
+//		List<MemberResponseDto> members = memberService.findAll();
+//		return ApiResult.createSuccess(members);
+//	}
+
+	@Tag(name = "4-회원목록조회_검색조건")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "회원목록")})
 	@GetMapping("/members")
-	public ApiResult<List<MemberResponseDto>> findAll() {
-		List<MemberResponseDto> members = memberService.findAll();
+	public ApiResult<List<MemberResponseDto>> findMembers(@ParameterObject MemberSearchDto memberSearchDto) {
+		List<MemberResponseDto> members = memberService.findMembers(memberSearchDto);
 		return ApiResult.createSuccess(members);
 	}
 
-	@Tag(name = "5-회원수정")
+	@Tag(name = "6-회원수정")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "수정성공")})
 	@PutMapping("/members/{id}")
 	public ApiResult<?> update(@Parameter(description = "수정하려는 회원정보", required = true) @RequestBody MemberUpdateDto memberUpdateDto

@@ -6,6 +6,7 @@ import com.example.demo.config.jwt.JwtTokenProvider;
 import com.example.demo.config.jwt.dto.TokenInfo;
 import com.example.demo.member.dto.MemberAddRequestDto;
 import com.example.demo.member.dto.MemberResponseDto;
+import com.example.demo.member.dto.MemberSearchDto;
 import com.example.demo.member.dto.MemberUpdateDto;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
@@ -52,7 +53,7 @@ public class MemberService {
 			.memberName(savedMember.getMemberName())
 			.memberTel(savedMember.getMemberTel())
 			//.memberState(savedMember.getMemberState())
-			.refreshToken(savedMember.getRefreshToken())
+//			.refreshToken(savedMember.getRefreshToken())
 			.build();
 	}
 
@@ -103,7 +104,7 @@ public class MemberService {
 			.memberName(findMember.getMemberName())
 			.memberTel(findMember.getMemberTel())
 			//.memberState(findMember.getMemberState())
-			.refreshToken(findMember.getRefreshToken())
+//			.refreshToken(findMember.getRefreshToken())
 			.build();
 	}
 
@@ -112,6 +113,10 @@ public class MemberService {
 			.stream()
 			.map(MemberResponseDto::new)
 			.collect(Collectors.toList());
+	}
+
+	public List<MemberResponseDto> findMembers(MemberSearchDto memberSearchDto) {
+		return memberRepository.findMembers(memberSearchDto);
 	}
 
 	@Transactional
