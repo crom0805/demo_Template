@@ -53,7 +53,7 @@ class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("회원실패-아이디중복")
+	@DisplayName("회원가입실패-아이디중복")
 	void saveFail() {
 		// given
 		MemberAddRequestDto requestDto = new MemberAddRequestDto();
