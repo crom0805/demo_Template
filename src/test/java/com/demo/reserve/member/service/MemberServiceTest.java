@@ -1,4 +1,4 @@
-package com.demo.member.service;
+package com.demo.reserve.member.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
