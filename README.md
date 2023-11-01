@@ -7,7 +7,7 @@
 
 ## 개발환경
 - Java Version : Open JDK 17
-- Framework : Spring Boot 3.1.2
+- Framework : Spring Boot 3.1.4
 - ORM : Spring Data JPA (with. Querydsl)
 - Auth : Spring Security & JWT
 - Env : Spring Cloud Config
