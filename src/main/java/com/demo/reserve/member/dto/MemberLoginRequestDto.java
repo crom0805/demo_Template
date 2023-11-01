@@ -10,9 +10,9 @@ public class MemberLoginRequestDto {
 
 	@NotEmpty(message = "아이디를 입력해주세요.", groups = NotEmptyGroup.class)
 	@Schema(description = "로그인ID(이메일)", nullable = false, example = "test@test.com")
-	private String memberId;
+	private String loginId;
 
 	@NotEmpty(message = "비밀번호를 입력해주세요.", groups = NotEmptyGroup.class)
-	@Schema(description = "비밀번호", nullable = false, example = "1q2w3e4r")
-	private String memberPwd;
+	@Schema(description = "비밀번호", nullable = false, example = "qwer1234")
+	private String loginPw;
 }

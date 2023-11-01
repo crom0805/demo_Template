@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/front")
 @RequiredArgsConstructor
-@Tag(name = "Front API")
+@Tag(name = "2. 강연 API")
 public class FrontController {
 
 	private final LectureService lectureService;
@@ -63,12 +63,12 @@ public class FrontController {
 	/**
 	 * 강연신청내역
 	 */
-	@GetMapping("/applicant/{empNo}")
+	@GetMapping("/applicant/{memberId}")
 	@Operation(summary = "강연 신청내역 조회", description = "사번 입력하여 신청내역을 조회.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "강연신청내역")})
-	public ApiResult<List<ApplicantHisResponseDto>> findApplicantHis(@Parameter(description = "조회하려는 사번", required = true)
-			@PathVariable("empNo") String empNo) {
-		List<ApplicantHisResponseDto> responseDto = lectureService.findApplicantHis(empNo);
+	public ApiResult<List<ApplicantHisResponseDto>> findApplicantHis(@Parameter(description = "조회하려는 회원ID", required = true)
+			@PathVariable("memberId") Integer memberId) {
+		List<ApplicantHisResponseDto> responseDto = lectureService.findApplicantHis(memberId);
 		return ApiResult.createSuccess(responseDto);
 	}
 

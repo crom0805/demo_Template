@@ -1,12 +1,17 @@
 package com.demo.reserve.member.domain;
 
-import com.demo.common.entity.BaseEntity;
+import com.demo.common.entity.BaseEntityDatetime;
+import com.demo.reserve.lecture.domain.Applicant;
+import com.demo.reserve.lecture.domain.ApplicantHis;
 import com.demo.reserve.member.dto.MemberUpdateDto;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
@@ -14,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,17 +30,33 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member extends BaseEntity implements UserDetails {
+public class Member extends BaseEntityDatetime implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memberSeq;
-	private String memberId;
-	private String memberPwd;
+	@Column(name = "member_id", nullable = false)
+	private Integer id;
+	private String loginId;
+	private String loginPw;
 	private String memberName;
-	private String memberState;
 	private String memberTel;
 	private String refreshToken;
+	private String regId;
+	private String modId;
+
+	@OneToMany(mappedBy = "member")
+	private List<Applicant> applicants = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member")
+	private List<ApplicantHis> applicantHisList = new ArrayList<>();
+
+	public Member(String loginId) {
+		this.loginId = loginId;
+	}
+
+	public Member(Integer memberId) {
+		this.id = memberId;
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -42,12 +65,12 @@ public class Member extends BaseEntity implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return memberId;
+		return loginId;
 	}
 
 	@Override
 	public String getPassword() {
-		return memberPwd;
+		return loginPw;
 	}
 
 	@Override
@@ -76,8 +99,8 @@ public class Member extends BaseEntity implements UserDetails {
 	}
 
 	public void updateMember(MemberUpdateDto updateDto) {
+		this.loginPw = updateDto.getLoginPw();
 		this.memberName = updateDto.getMemberName();
-		this.memberPwd = updateDto.getMemberPwd();
 		this.memberTel = updateDto.getMemberTel();
 	}
 }

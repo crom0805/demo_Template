@@ -58,7 +58,7 @@ public class MemberControllerTest {
 		dto.put("memberName", "유닛테스트");
 		dto.put("memberTel", "01099994444");
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DOMAIN + "/members/signup")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DOMAIN + "/front/members/signup")
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(dto));
@@ -83,7 +83,7 @@ public class MemberControllerTest {
 		dto.put("memberId", "test@test.com");
 		dto.put("memberPwd", "1q2w3e4r");
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DOMAIN + "/members/login")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(DOMAIN + "/front/members/login")
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(dto));
@@ -108,7 +108,7 @@ public class MemberControllerTest {
 	@Test
 	public void 회원목록조회() throws Exception {
 		//given
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(DOMAIN + "/members")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(DOMAIN + "/back/members")
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token);
@@ -127,7 +127,7 @@ public class MemberControllerTest {
 	@Test
 	public void 회원조회() throws Exception {
 		//given
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(DOMAIN + "/members/test@test.com")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(DOMAIN + "/back/members/test@test.com")
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token);
@@ -154,7 +154,7 @@ public class MemberControllerTest {
 		dto.put("memberName", "팜하니2");
 		dto.put("memberTel", "01099994444");
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.put(DOMAIN + "/members/test@test.com")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put(DOMAIN + "/front/members/test@test.com")
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)

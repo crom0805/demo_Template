@@ -56,7 +56,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 				, lecture.lectureRoom
 				, lecture.lectureContent
 				, lecture.lecturePeople
-				, QApplicant.applicant.empNo.count().intValue()
+				, QApplicant.applicant.member.count().intValue()
 				, lecture.startDt
 				, lecture.endDt
 			))
@@ -64,7 +64,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.join(lecture.applicants, QApplicant.applicant)
 			.where(QApplicant.applicant.applyDt.between(today.minusDays(3), today))
 			.groupBy(lecture.id, lecture.lecturer, lecture.lectureRoom, lecture.lecturePeople, lecture.startDt, lecture.endDt)
-			.orderBy(QApplicant.applicant.empNo.count().desc(), lecture.startDt.asc())
+			.orderBy(QApplicant.applicant.member.count().desc(), lecture.startDt.asc())
 			.fetch();
 	}
 

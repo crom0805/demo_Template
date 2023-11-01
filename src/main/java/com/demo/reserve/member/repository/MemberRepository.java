@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
-	Optional<Member> findByMemberId(String memberId);
+	Optional<Member> findByLoginId(String loginId);
 
-	boolean existsByMemberId(String memberId);
+	boolean existsByLoginId(String loginId);
 }

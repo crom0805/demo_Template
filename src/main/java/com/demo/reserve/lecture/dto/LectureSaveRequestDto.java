@@ -35,10 +35,10 @@ public class LectureSaveRequestDto {
 	private Integer lecturePeople;
 
 	@NotNull(message = "시작일시를 입력해주세요.", groups = NotNullGroup.class)
-	@Schema(description = "강연시작일시(yyyyMMdd HHmmss)", example = "20231018103000")
+	@Schema(description = "강연시작일시(yyyyMMdd HHmmss)", example = "20231101103000")
 	private String startDt;
 
 	@NotNull(message = "종료일시를 입력해주세요.", groups = NotNullGroup.class)
-	@Schema(description = "강연종료일시(yyyyMMdd HHmmss)", example = "20231025170000")
+	@Schema(description = "강연종료일시(yyyyMMdd HHmmss)", example = "20231130170000")
 	private String endDt;
 }

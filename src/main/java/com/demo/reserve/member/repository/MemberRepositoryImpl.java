@@ -23,21 +23,22 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	public List<MemberResponseDto> findMembers(MemberSearchDto memberSearchDto) {
 		return queryFactory
 			.select(new QMemberResponseDto(
-				member.memberId
+				member.id
+				, member.loginId
 				, member.memberName
 				, member.memberTel
 			))
 			.from(member)
 			.where(
-				memberIdEq(memberSearchDto.getMemberId())
+				loginIdEq(memberSearchDto.getLoginId())
 				, memberNameLike(memberSearchDto.getMemberName())
 				, memberTelLike(memberSearchDto.getMemberTel())
 			)
 			.fetch();
 	}
 
-	private BooleanExpression memberIdEq(String memberId) {
-		return StringUtils.hasText(memberId) ? member.memberId.eq(memberId) : null;
+	private BooleanExpression loginIdEq(String loginId) {
+		return StringUtils.hasText(loginId) ? member.loginId.eq(loginId) : null;
 	}
 
 	private BooleanExpression memberNameLike(String memberName) {

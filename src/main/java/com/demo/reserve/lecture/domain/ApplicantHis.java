@@ -1,5 +1,7 @@
 package com.demo.reserve.lecture.domain;
 
+import com.demo.common.entity.BaseEntity;
+import com.demo.reserve.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,16 +26,12 @@ import org.hibernate.annotations.CreationTimestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "applicant_his")
-public class ApplicantHis {
+public class ApplicantHis extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "his_id", nullable = false)
 	private Integer id;
-
-	@NotNull
-	@Column(nullable = false, length = 5)
-	private String empNo;
 
 	@NotNull
 	@Column(nullable = false, length = 1)
@@ -47,4 +45,7 @@ public class ApplicantHis {
 	@JoinColumn(name = "lecture_id")
 	private Lecture lecture;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member member;
 }

@@ -17,8 +17,8 @@ public class ApplicantResponseDto {
 	@Schema(description = "신청한 강연ID", example = "11")
 	private Integer lectureId;
 
-	@Schema(description = "사번", example = "A1234")
-	private String empNo;
+	@Schema(description = "신천한 회원ID", example = "1")
+	private Integer memberId;
 
 	@Schema(description = "신청일시", example = "20231019144723")
 	private String applyDt;
@@ -26,7 +26,7 @@ public class ApplicantResponseDto {
 	public ApplicantResponseDto(Applicant applicant) {
 		this.applicantId = applicant.getId();
 		this.lectureId = applicant.getLecture().getId();
-		this.empNo = applicant.getEmpNo();
+		this.memberId = applicant.getMember().getId();
 		this.applyDt = applicant.getApplyDt().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 	}
 

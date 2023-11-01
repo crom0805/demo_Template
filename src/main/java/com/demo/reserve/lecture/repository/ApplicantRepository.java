@@ -18,6 +18,6 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
 	/**
 	 * 신청취소를 위한 정보조회
 	 */
-	Optional<Applicant> findByEmpNoAndLectureId(String empNo, Integer lectureId);
+	Optional<Applicant> findByMemberIdAndLectureId(Integer memberId, Integer lectureId);
 
 }

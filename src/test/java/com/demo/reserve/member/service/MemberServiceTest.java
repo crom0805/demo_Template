@@ -6,13 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.demo.common.exception.DuplicatedUserException;
 import com.demo.config.jwt.dto.TokenInfo;
+import com.demo.reserve.member.domain.Member;
 import com.demo.reserve.member.dto.MemberAddRequestDto;
 import com.demo.reserve.member.dto.MemberResponseDto;
 import com.demo.reserve.member.dto.MemberSearchDto;
 import com.demo.reserve.member.dto.MemberUpdateDto;
-import com.demo.reserve.member.domain.Member;
 import com.demo.reserve.member.repository.MemberRepository;
-import com.demo.reserve.member.service.MemberService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,16 +39,16 @@ class MemberServiceTest {
 	void save() {
 		// given
 		MemberAddRequestDto requestDto = new MemberAddRequestDto();
-		requestDto.setMemberId("test@junit.com");
-		requestDto.setMemberPwd("qwer1234!@");
+		requestDto.setLoginId("test@junit.com");
+		requestDto.setLoginPw("qwer1234!@");
 		requestDto.setMemberName("테스트유저");
 
 		// when
 		memberService.save(requestDto);
 
 		// then
-		Member findMember = memberRepository.findByMemberId(requestDto.getMemberId()).orElseThrow();
-		assertThat(findMember.getMemberId()).isEqualTo("test@junit.com");
+		Member findMember = memberRepository.findByLoginId(requestDto.getLoginId()).orElseThrow();
+		assertThat(findMember.getLoginId()).isEqualTo("test@junit.com");
 		assertThat(findMember.getMemberName()).isEqualTo("테스트유저");
 	}
 
@@ -58,8 +57,8 @@ class MemberServiceTest {
 	void saveFail() {
 		// given
 		MemberAddRequestDto requestDto = new MemberAddRequestDto();
-		requestDto.setMemberId("test@test.com");
-		requestDto.setMemberPwd("qwer1234!@");
+		requestDto.setLoginId("test@test.com");
+		requestDto.setLoginPw("qwer1234!@");
 		requestDto.setMemberName("테스트유저");
 
 		// when
@@ -94,7 +93,7 @@ class MemberServiceTest {
 		MemberResponseDto findMember = memberService.findByMemberId(id);
 
 		// then
-		assertThat(findMember.getMemberId()).isEqualTo(id);
+		assertThat(findMember.getLoginId()).isEqualTo(id);
 	}
 
 	@Test
@@ -119,7 +118,7 @@ class MemberServiceTest {
 		String id = "test@test.com";
 		MemberUpdateDto updateDto = new MemberUpdateDto();
 		updateDto.setMemberName("팜하니_수정");
-		updateDto.setMemberPwd("1q2w3e4r");
+		updateDto.setLoginPw("1q2w3e4r");
 		updateDto.setMemberTel("01099995555");
 
 		// when

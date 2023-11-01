@@ -20,8 +20,11 @@ public class ApplicantHisResponseDto {
 	@Schema(description = "신청한 강연명", example = "신규직원 OJT")
 	private String lectureContent;
 
-	@Schema(description = "사번", example = "A1234")
-	private String empNo;
+	@Schema(description = "신청한 회원ID", example = "1")
+	private Integer memberId;
+
+	@Schema(description = "신청한 회원 로그인ID", example = "test@test.com")
+	private String loginId;
 
 	@Schema(description = "신청/취소 구분", example = "A=신청, C=취소")
 	private String applyDiv;
@@ -33,7 +36,8 @@ public class ApplicantHisResponseDto {
 		this.applicantId = applicant.getId();
 		this.lectureContent = applicant.getLecture().getLectureContent();
 		this.lectureId = applicant.getLecture().getId();
-		this.empNo = applicant.getEmpNo();
+		this.memberId = applicant.getMember().getId();
+		this.loginId = applicant.getMember().getLoginId();
 		this.applyDiv = applicant.getApplyDiv();
 		this.applyDt = applicant.getRegDt().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 	}

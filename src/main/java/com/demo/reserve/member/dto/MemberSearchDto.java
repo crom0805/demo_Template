@@ -7,7 +7,7 @@ import lombok.Data;
 public class MemberSearchDto {
 
 	@Schema(description = "로그인ID(이메일)", nullable = true, example = "test@test.com")
-	private String memberId;
+	private String loginId;
 
 	@Schema(description = "회원명", nullable = true, example = "팜하니")
 	private String memberName;

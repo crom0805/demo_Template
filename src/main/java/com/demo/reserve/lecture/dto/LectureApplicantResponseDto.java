@@ -2,6 +2,7 @@ package com.demo.reserve.lecture.dto;
 
 import com.demo.reserve.lecture.domain.Applicant;
 import com.demo.reserve.lecture.domain.Lecture;
+import com.demo.reserve.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class LectureApplicantResponseDto {
 	@Schema(description = "강연내용", example = "신규입사자 OJT")
 	private String lectureContent;
 
-	@Schema(description = "신청자 사번목록", nullable = true, example = "[\"A1234\",\"B9876\"]")
+	@Schema(description = "신청자 ID목록", nullable = true, example = "[\"test@test.com\",\"test2@test.com\"]")
 	private List<String> applicants;
 
 	public LectureApplicantResponseDto(Lecture lecture) {
@@ -33,7 +34,7 @@ public class LectureApplicantResponseDto {
 		this.lecturer = lecture.getLecturer();
 		this.lectureRoom = lecture.getLectureRoom();
 		this.lectureContent = lecture.getLectureContent();
-		this.applicants = lecture.getApplicants().stream().map(Applicant::getEmpNo).collect(Collectors.toList());
+		this.applicants = lecture.getApplicants().stream().map(applicant -> applicant.getMember().getLoginId()).collect(Collectors.toList());
 	}
 
 }

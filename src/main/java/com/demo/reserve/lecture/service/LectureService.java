@@ -14,6 +14,7 @@ import com.demo.reserve.lecture.dto.LectureSaveRequestDto;
 import com.demo.reserve.lecture.repository.ApplicantHisRepository;
 import com.demo.reserve.lecture.repository.ApplicantRepository;
 import com.demo.reserve.lecture.repository.LectureRepository;
+import com.demo.reserve.member.domain.Member;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -91,7 +92,7 @@ public class LectureService {
 	public List<String> findApplicantByLecture(Integer lectureId) {
 		return applicantRepository.findByLectureId(lectureId)
 			.stream()
-			.map(Applicant::getEmpNo)
+			.map(applicant -> applicant.getMember().getLoginId())
 			.collect(Collectors.toList());
 	}
 
@@ -116,15 +117,15 @@ public class LectureService {
 		if (lecture.getApplicants() != null) {
 			// 1. 최대인원 체크
 			if (lecture.getLecturePeople() == lecture.getApplicants().size()) {
-				log.error("해당 강연의 빈좌석이 없습니다. empNo=" + requestDto.getEmpNo());
-				throw new CustomException("해당 강연의 빈좌석이 없습니다. empNo=" + requestDto.getEmpNo());
+				log.error("해당 강연의 빈좌석이 없습니다. memberID=" + requestDto.getMemberId());
+				throw new CustomException("해당 강연의 빈좌석이 없습니다. memberId=" + requestDto.getMemberId());
 			}
 
 			// 2. 중복등록체크
 			List<Applicant> applicantList = lecture.getApplicants();
-			long count = applicantList.stream().filter(applicant -> applicant.getEmpNo().equals(requestDto.getEmpNo())).count();
+			long count = applicantList.stream().filter(applicant -> applicant.getMember().getId().equals(requestDto.getMemberId())).count();
 			if (count > 0) {
-				log.error("이미 등록된 사번입니다. empNo=" + requestDto.getEmpNo());
+				log.error("이미 등록된 회원입니다. memberId=" + requestDto.getMemberId());
 				throw new DuplicatedException();
 			}
 		}
@@ -133,7 +134,7 @@ public class LectureService {
 		Applicant applicant = applicantRepository.save(
 			Applicant.builder()
 				.lecture(new Lecture(requestDto.getLectureId()))
-				.empNo(requestDto.getEmpNo())
+				.member(new Member(requestDto.getMemberId()))
 				.build()
 		);
 
@@ -141,7 +142,7 @@ public class LectureService {
 		applicantHisRepository.save(
 			ApplicantHis.builder()
 				.lecture(new Lecture(requestDto.getLectureId()))
-				.empNo(requestDto.getEmpNo())
+				.member(new Member(requestDto.getMemberId()))
 				.applyDiv("A")
 				.build()
 		);
@@ -152,8 +153,8 @@ public class LectureService {
 	/**
 	 * Front_신청내역조회
 	 */
-	public List<ApplicantHisResponseDto> findApplicantHis(String empNo) {
-		return applicantHisRepository.findByEmpNo(empNo)
+	public List<ApplicantHisResponseDto> findApplicantHis(Integer memberId) {
+		return applicantHisRepository.findByMemberId(memberId)
 			.stream()
 			.map(ApplicantHisResponseDto::new)
 			.collect(Collectors.toList());
@@ -165,7 +166,7 @@ public class LectureService {
 	@Transactional
 	public String cancelLecture(LectureApplyRequestDto requestDto) {
 
-		Applicant applicant = applicantRepository.findByEmpNoAndLectureId(requestDto.getEmpNo(), requestDto.getLectureId())
+		Applicant applicant = applicantRepository.findByMemberIdAndLectureId(requestDto.getMemberId(), requestDto.getLectureId())
 			.orElseThrow(() -> new CustomException("해당 신청정보가 없습니다."));
 
 		// 신청정보 삭제
@@ -174,8 +175,8 @@ public class LectureService {
 		// 취소이력 저장
 		applicantHisRepository.save(
 			ApplicantHis.builder()
-				.lecture(new Lecture(applicant.getLecture().getId()))
-				.empNo(applicant.getEmpNo())
+				.lecture(applicant.getLecture())
+				.member(applicant.getMember())
 				.applyDiv("C")
 				.build()
 		);

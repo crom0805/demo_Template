@@ -2,19 +2,20 @@ package com.demo.common.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import java.time.LocalDateTime;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(value = AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-public class BaseEntity extends BaseEntityDatetime {
+public class BaseEntityDatetime {
 
-	@CreatedBy
-	private String regId;
+	@CreationTimestamp
+	private LocalDateTime regDt;
 
-	@LastModifiedBy
-	private String modId;
+	@UpdateTimestamp
+	private LocalDateTime modDt;
 }

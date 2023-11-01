@@ -42,23 +42,23 @@ public class MemberService {
 
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		Member savedMember = memberRepository.save(Member.builder()
-			.memberId(requestDto.getMemberId())
-			.memberPwd(bCryptPasswordEncoder.encode(requestDto.getMemberPwd()))
-			.memberName(requestDto.getMemberName())
-			.memberTel(requestDto.getMemberTel())
+				.loginId(requestDto.getLoginId())
+				.loginPw(bCryptPasswordEncoder.encode(requestDto.getLoginPw()))
+				.memberName(requestDto.getMemberName())
+				.memberTel(requestDto.getMemberTel())
+				.regId(requestDto.getLoginId())
+				.modId(requestDto.getLoginId())
 			.build());
 
 		return MemberResponseDto.builder()
-			.memberId(savedMember.getMemberId())
+			.loginId(savedMember.getLoginId())
 			.memberName(savedMember.getMemberName())
 			.memberTel(savedMember.getMemberTel())
-			//.memberState(savedMember.getMemberState())
-//			.refreshToken(savedMember.getRefreshToken())
 			.build();
 	}
 
 	private void validateDuplicateMember(MemberAddRequestDto requestDto) {
-		if (memberRepository.existsByMemberId(requestDto.getMemberId())) {
+		if (memberRepository.existsByLoginId(requestDto.getLoginId())) {
 			throw new DuplicatedUserException();
 		}
 	}
@@ -67,13 +67,13 @@ public class MemberService {
 	 * 로그인(=jwt 인증)
 	 */
 	@Transactional
-	public TokenInfo login(String memberId, String password) {
+	public TokenInfo login(String loginId, String password) {
 
 		TokenInfo tokenInfo = null;
 		try {
 			log.debug("Authentication 객체 생성");
 			// 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
 
 			log.debug("CustomUserDetailsService.loadUserByUsername 실행");
 
@@ -84,7 +84,7 @@ public class MemberService {
 			tokenInfo = jwtTokenProvider.generateToken(authentication);
 
 			// 4. refreshToken 저장
-			Member member = memberRepository.findByMemberId(memberId)
+			Member member = memberRepository.findByLoginId(loginId)
 				.orElseThrow();
 			member.updateRefreshToken(tokenInfo.getRefreshToken());
 		} catch (InternalAuthenticationServiceException authenticationServiceException) {
@@ -95,16 +95,15 @@ public class MemberService {
 		return tokenInfo;
 	}
 
-	public MemberResponseDto findByMemberId(String memberId) {
-		Member findMember = memberRepository.findByMemberId(memberId)
+	public MemberResponseDto findByMemberId(String loginId) {
+		Member findMember = memberRepository.findByLoginId(loginId)
 			.orElseThrow(UserNotFoundException::new);
 
 		return MemberResponseDto.builder()
-			.memberId(findMember.getMemberId())
+			.memberId(findMember.getId())
+			.loginId(findMember.getLoginId())
 			.memberName(findMember.getMemberName())
 			.memberTel(findMember.getMemberTel())
-			//.memberState(findMember.getMemberState())
-//			.refreshToken(findMember.getRefreshToken())
 			.build();
 	}
 
@@ -120,11 +119,11 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void update(MemberUpdateDto memberUpdateDto, String memberId) {
-		Member member = memberRepository.findByMemberId(memberId)
+	public void update(MemberUpdateDto memberUpdateDto, String loginId) {
+		Member member = memberRepository.findByLoginId(loginId)
 			.orElseThrow(UserNotFoundException::new);
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		memberUpdateDto.setMemberPwd(bCryptPasswordEncoder.encode(memberUpdateDto.getMemberPwd()));
+		memberUpdateDto.setLoginPw(bCryptPasswordEncoder.encode(memberUpdateDto.getLoginPw()));
 		member.updateMember(memberUpdateDto);
 	}
 }

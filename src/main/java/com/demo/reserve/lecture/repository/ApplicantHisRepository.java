@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ApplicantHisRepository extends JpaRepository<ApplicantHis, Integer> {
 
-	List<ApplicantHis> findByEmpNo(String empNo);
+	List<ApplicantHis> findByMemberId(Integer memberId);
 }

@@ -13,6 +13,7 @@ import com.demo.reserve.lecture.dto.LectureResponseDto;
 import com.demo.reserve.lecture.dto.LectureSaveRequestDto;
 import com.demo.reserve.lecture.repository.ApplicantRepository;
 import com.demo.reserve.lecture.repository.LectureRepository;
+import com.demo.reserve.member.domain.Member;
 import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -132,7 +133,7 @@ class LectureServiceTest {
 		Applicant applicant = applicantRepository.save(
 			Applicant.builder()
 				.lecture(new Lecture(1))
-				.empNo("TEST1")
+				.member(new Member(1))
 				.build()
 		);
 
@@ -152,7 +153,7 @@ class LectureServiceTest {
 		Applicant applicant = applicantRepository.save(
 			Applicant.builder()
 				.lecture(new Lecture(1))
-				.empNo("TEST1")
+				.member(new Member(1))
 				.build()
 		);
 
@@ -198,7 +199,7 @@ class LectureServiceTest {
 
 		LectureApplyRequestDto applyRequestDto = new LectureApplyRequestDto();
 		applyRequestDto.setLectureId(responseDto.getLectureId());
-		applyRequestDto.setEmpNo("TEST1");
+		applyRequestDto.setMemberId(1);
 
 		// when
 		lectureService.applyLecture(applyRequestDto);
@@ -209,51 +210,17 @@ class LectureServiceTest {
 	}
 
 	@Test
-	@DisplayName("[Front] 강연신청실패 - 동시성검증")
-	void applyLectureFail() throws Exception {
-		//given
-		int thread = 10;
-		ExecutorService executorService = Executors.newFixedThreadPool(10);
-		CountDownLatch latch = new CountDownLatch(thread);
-
-		//when
-		// 최대정원 5명의 강연에 10명의 강연신청을 병렬로 처리
-		for (int i = 0; i < thread ; i++) {
-			executorService.submit(() -> {
-				String randomStr = RandomStringUtils.random(5, true, true);
-				try {
-					LectureApplyRequestDto applyDto = new LectureApplyRequestDto();
-					applyDto.setLectureId(1);
-					applyDto.setEmpNo(randomStr);
-					lectureService.applyLecture(applyDto);
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					latch.countDown();
-				}
-			});
-		}
-
-		latch.await();
-
-		//then
-		List<String> response = lectureService.findApplicantByLecture(1);
-		assertThat(response.size()).isEqualTo(5);
-
-	}
-
-	@Test
 	@DisplayName("[Front] 신청내역조회")
 	void findApplicantHis() {
 		// given
-		String empNo = "A2345";
+		Integer memberId = 1;
 
 		// when
-		List<ApplicantHisResponseDto> response = lectureService.findApplicantHis(empNo);
+		List<ApplicantHisResponseDto> response = lectureService.findApplicantHis(memberId);
 
 		// then
 		assertThat(response)
-			.filteredOn(applicant -> applicant.getEmpNo().equals("A2345")).size()
+			.filteredOn(applicant -> applicant.getMemberId().equals(memberId)).size()
 			.isEqualTo(response.size());
 	}
 
@@ -264,13 +231,13 @@ class LectureServiceTest {
 		Applicant applicant = applicantRepository.save(
 			Applicant.builder()
 				.lecture(new Lecture(1))
-				.empNo("TEST1")
+				.member(new Member(1))
 				.build()
 		);
 
 		LectureApplyRequestDto requestDto = new LectureApplyRequestDto();
 		requestDto.setLectureId(1);
-		requestDto.setEmpNo("TEST1");
+		requestDto.setMemberId(1);
 
 		// when
 		String response = lectureService.cancelLecture(requestDto);

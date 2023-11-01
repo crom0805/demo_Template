@@ -24,10 +24,7 @@ public class SecurityConfig {
 	@Bean
 	public WebSecurityCustomizer configure() {
 		return (web) -> web.ignoring()
-			.requestMatchers("/swagger-ui/**")
-			.requestMatchers("/members/signup")
-			.requestMatchers("/members/login")
-			.requestMatchers("/v3/api-docs/**");
+			.requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
 	}
 
 	@Bean
@@ -39,17 +36,14 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http.authorizeHttpRequests(request -> request
-			.requestMatchers("/members/login").permitAll()
-			.requestMatchers("/members/signup").permitAll()
+			.requestMatchers("/front/members/login").permitAll()
+			.requestMatchers("/front/members/signup").permitAll()
 			.requestMatchers("/swagger-ui/index.html").permitAll()
 			.requestMatchers("/v3/api-docs/**").permitAll()
 			.anyRequest().authenticated());
 
 		http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
-
-//        http.exceptionHandling(exceptionHandling ->
-//                exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
 		return http.build();
 	}

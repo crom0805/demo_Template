@@ -10,27 +10,29 @@ import lombok.Data;
 @Builder
 public class MemberResponseDto {
 
-	@Schema(description = "로그인시에 사용할 이메일", nullable = false, example = "test@test.com")
-	private String memberId;
+	@Schema(description = "회원ID", nullable = false, example = "1")
+	private Integer memberId;
+
+	@Schema(description = "회원로그인ID(이메일)", nullable = false, example = "test@test.com")
+	private String loginId;
 
 	@Schema(description = "회원이름", nullable = false, example = "팜하니")
 	private String memberName;
-
-	//private String memberState;
 
 	@Schema(description = "연락처", example = "01012345678")
 	private String memberTel;
 
 	public MemberResponseDto(Member member) {
-		this.memberId = member.getMemberId();
+		this.memberId = member.getId();
+		this.loginId = member.getLoginId();
 		this.memberName = member.getMemberName();
-		//this.memberState = member.getMemberState();
 		this.memberTel = member.getMemberTel();
 	}
 
 	@QueryProjection
-	public MemberResponseDto(String memberId, String memberName, String memberTel) {
+	public MemberResponseDto(Integer memberId, String loginId, String memberName, String memberTel) {
 		this.memberId = memberId;
+		this.loginId = loginId;
 		this.memberName = memberName;
 		this.memberTel = memberTel;
 	}
