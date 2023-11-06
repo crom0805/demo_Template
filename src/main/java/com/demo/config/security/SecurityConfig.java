@@ -5,6 +5,7 @@ import com.demo.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -38,9 +40,16 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(request -> request
 			.requestMatchers("/front/members/login").permitAll()
 			.requestMatchers("/front/members/signup").permitAll()
+			.requestMatchers("/back/admin/login").permitAll()
+			.requestMatchers("/back/admin/reg").permitAll()
 			.requestMatchers("/swagger-ui/index.html").permitAll()
 			.requestMatchers("/v3/api-docs/**").permitAll()
+			.requestMatchers("/front/**").hasAuthority(Role.USER.getValue())
+			.requestMatchers("/back/**").hasAuthority(Role.ADMIN.getValue())
 			.anyRequest().authenticated());
+
+		http.exceptionHandling(exception -> exception
+			.defaultAuthenticationEntryPointFor(new CustomAuthenticationEntryPoint(), new AntPathRequestMatcher("/")));
 
 		http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);

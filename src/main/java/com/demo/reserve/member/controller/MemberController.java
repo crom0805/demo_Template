@@ -3,6 +3,7 @@ package com.demo.reserve.member.controller;
 import com.demo.common.api.ApiResult;
 import com.demo.common.validation.ValidationSequence;
 import com.demo.config.jwt.dto.TokenInfo;
+import com.demo.config.security.Role;
 import com.demo.reserve.member.dto.MemberAddRequestDto;
 import com.demo.reserve.member.dto.MemberLoginRequestDto;
 import com.demo.reserve.member.dto.MemberResponseDto;
@@ -48,6 +49,18 @@ public class MemberController {
 		return ApiResult.createSuccess(saved);
 	}
 
+	@PostMapping("/back/admin/reg")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "201", description = "어드민 등록 성공")
+	})
+	@Operation(summary = "어드민등록", description = "어드민등록을 진행합니다.")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ApiResult<MemberResponseDto> regAdmin(@Parameter(description = "등록하려는 어드민정보", required = true)
+	@Validated(ValidationSequence.class) @RequestBody MemberAddRequestDto requestDto) {
+		MemberResponseDto saved = memberService.saveAdmin(requestDto);
+		return ApiResult.createSuccess(saved);
+	}
+
 	@PostMapping("/front/members/login")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "로그인 성공")
@@ -57,7 +70,20 @@ public class MemberController {
 			@Validated(ValidationSequence.class) @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
 		String loginId = memberLoginRequestDto.getLoginId();
 		String loginPw = memberLoginRequestDto.getLoginPw();
-		TokenInfo tokenInfo = memberService.login(loginId, loginPw);
+		TokenInfo tokenInfo = memberService.login(loginId, loginPw, Role.USER.getValue());
+		return ApiResult.createSuccess(tokenInfo);
+	}
+
+	@PostMapping("/back/admin/login")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "로그인 성공")
+	})
+	@Operation(summary = "로그인", description = "ID와 비밀번호를 이용하여 로그인합니다.")
+	public ApiResult<TokenInfo> loginAdmin(@Parameter(description = "로그인하려는 ID/비밀번호", required = true)
+			@Validated(ValidationSequence.class) @RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+		String loginId = memberLoginRequestDto.getLoginId();
+		String loginPw = memberLoginRequestDto.getLoginPw();
+		TokenInfo tokenInfo = memberService.login(loginId, loginPw, Role.ADMIN.getValue());
 		return ApiResult.createSuccess(tokenInfo);
 	}
 

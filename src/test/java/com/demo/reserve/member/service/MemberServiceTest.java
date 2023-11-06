@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.demo.common.exception.DuplicatedUserException;
 import com.demo.config.jwt.dto.TokenInfo;
+import com.demo.config.security.Role;
 import com.demo.reserve.member.domain.Member;
 import com.demo.reserve.member.dto.MemberAddRequestDto;
 import com.demo.reserve.member.dto.MemberResponseDto;
@@ -68,14 +69,15 @@ class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("로그인")
+	@DisplayName("회원로그인")
 	void login() {
 		// given
 		String id = "test@test.com";
 		String pwd = "1q2w3e4r";
+		String role = Role.USER.getValue();
 
 		// when
-		TokenInfo tokenInfo = memberService.login(id, pwd);
+		TokenInfo tokenInfo = memberService.login(id, pwd, role);
 
 		// then
 		assertThat(tokenInfo).isNotNull();

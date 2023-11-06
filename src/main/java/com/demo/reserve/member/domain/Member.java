@@ -1,6 +1,7 @@
 package com.demo.reserve.member.domain;
 
 import com.demo.common.entity.BaseEntityDatetime;
+import com.demo.config.security.Role;
 import com.demo.reserve.lecture.domain.Applicant;
 import com.demo.reserve.lecture.domain.ApplicantHis;
 import com.demo.reserve.member.dto.MemberUpdateDto;
@@ -43,6 +44,7 @@ public class Member extends BaseEntityDatetime implements UserDetails {
 	private String refreshToken;
 	private String regId;
 	private String modId;
+	private String role;
 
 	@OneToMany(mappedBy = "member")
 	private List<Applicant> applicants = new ArrayList<>();
@@ -60,7 +62,7 @@ public class Member extends BaseEntityDatetime implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("user"));
+		return List.of(new SimpleGrantedAuthority(role));
 	}
 
 	@Override

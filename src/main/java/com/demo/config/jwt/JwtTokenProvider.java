@@ -10,9 +10,9 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,11 +36,7 @@ public class JwtTokenProvider {
 	}
 
 	// 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-	public TokenInfo generateToken(Authentication authentication) {
-		// 권한 가져오기
-		String authorities = authentication.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
+	public TokenInfo generateToken(Authentication authentication, String authorities) {
 
 		long now = (new Date()).getTime();
 		// Access Token 생성
@@ -75,12 +71,12 @@ public class JwtTokenProvider {
 		}
 
 		// 클레임에서 권한 정보 가져오기
-//        Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(claims.get("auth").toString().split(","))
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("auth").toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
 
-		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+		//Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
 		// UserDetails 객체를 만들어서 Authentication 리턴
 		UserDetails principal = new User(claims.getSubject(), "", authorities);
