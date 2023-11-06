@@ -4,6 +4,7 @@ import com.demo.common.exception.DuplicatedUserException;
 import com.demo.common.exception.UserNotFoundException;
 import com.demo.config.jwt.JwtTokenProvider;
 import com.demo.config.jwt.dto.TokenInfo;
+import com.demo.config.security.Role;
 import com.demo.reserve.member.dto.MemberAddRequestDto;
 import com.demo.reserve.member.dto.MemberResponseDto;
 import com.demo.reserve.member.dto.MemberSearchDto;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +50,33 @@ public class MemberService {
 				.memberTel(requestDto.getMemberTel())
 				.regId(requestDto.getLoginId())
 				.modId(requestDto.getLoginId())
+				.role(Role.USER.getValue())
+			.build());
+
+		return MemberResponseDto.builder()
+			.loginId(savedMember.getLoginId())
+			.memberName(savedMember.getMemberName())
+			.memberTel(savedMember.getMemberTel())
+			.build();
+	}
+
+	/**
+	 * 어드민 등록
+	 */
+	@Transactional
+	public MemberResponseDto saveAdmin(MemberAddRequestDto requestDto) {
+		// member id validation check
+		validateDuplicateMember(requestDto);
+
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		Member savedMember = memberRepository.save(Member.builder()
+				.loginId(requestDto.getLoginId())
+				.loginPw(bCryptPasswordEncoder.encode(requestDto.getLoginPw()))
+				.memberName(requestDto.getMemberName())
+				.memberTel(requestDto.getMemberTel())
+				.regId(requestDto.getLoginId())
+				.modId(requestDto.getLoginId())
+				.role(Role.ADMIN.getValue())
 			.build());
 
 		return MemberResponseDto.builder()
@@ -67,7 +96,7 @@ public class MemberService {
 	 * 로그인(=jwt 인증)
 	 */
 	@Transactional
-	public TokenInfo login(String loginId, String password) {
+	public TokenInfo login(String loginId, String password, String role) {
 
 		TokenInfo tokenInfo = null;
 		try {
@@ -80,8 +109,17 @@ public class MemberService {
 			// 2. 실제 검증. CustomUserDetailsService.loadUserByUsername 실행
 			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+			// 권한 가져오기
+			String authorities = authentication.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.joining(","));
+
+			if (!role.equals(authorities)) {
+				throw new UserNotFoundException();
+			}
+
 			// 3. 인증 정보를 기반으로 JWT 토큰 생성
-			tokenInfo = jwtTokenProvider.generateToken(authentication);
+			tokenInfo = jwtTokenProvider.generateToken(authentication, authorities);
 
 			// 4. refreshToken 저장
 			Member member = memberRepository.findByLoginId(loginId)

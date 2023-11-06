@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtTokenProvider jwtTokenProvider;
 
 	private static final List<String> EXCLUDE_URL =
-		List.of("/front/members/signup", "/front/members/login");
+		List.of("/front/members/signup", "/front/members/login", "/back/admin/login", "/back/admin/reg");
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {

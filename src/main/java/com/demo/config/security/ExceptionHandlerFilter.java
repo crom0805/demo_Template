@@ -25,7 +25,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
 			if (e instanceof BadCredentialsException) {
-				setErrorResponse(response, ExceptionEnum.FORBIDDEN);
+				setErrorResponse(response, ExceptionEnum.BAD_CREDENTIALS);
 			} else if (e instanceof io.jsonwebtoken.security.SecurityException) {
 				setErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN);
 			} else if (e instanceof MalformedJwtException) {
