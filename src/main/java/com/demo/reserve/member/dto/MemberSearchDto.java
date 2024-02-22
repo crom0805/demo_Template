@@ -1,5 +1,7 @@
 package com.demo.reserve.member.dto;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -14,4 +16,8 @@ public class MemberSearchDto {
 
 	@Schema(description = "전화번호", nullable = true, example = "01012345678")
 	private String memberTel;
+
+//	@Schema(description = "사용여부", nullable = true)
+	@Parameter(description = "사용여부")
+	private Boolean isUse;
 }
