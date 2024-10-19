@@ -48,7 +48,7 @@ public class LectureService {
 	}
 
 	/**
-	 * BackOffice_강연등록
+	 * BackOffice_강연등록,,
 	 */
 	@Transactional
 	public LectureResponseDto saveLecture(LectureSaveRequestDto requestDto) {
